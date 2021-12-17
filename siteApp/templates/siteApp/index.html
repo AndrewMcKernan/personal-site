@@ -231,6 +231,37 @@
                 function contactService(serviceName){
                     $("#services_select").val(serviceName);
                 }
+
+                function submitEmailForm(){
+                	event.preventDefault();
+                	event.stopPropogation();
+                	var name = $('#name').val();
+                	var email = $('#email').val();
+                	var service = $('#services_select').val();
+                	var message = $('#message').val();
+                	$.ajax({
+                		url:"{% url 'siteApp:sendEmail' %}",
+                		type:"POST",
+                		headers:{'X-CSRFToken': '{{ csrf_token }}'},
+                		data:{
+                			"name": name,
+                			"email": email,
+                			"service", service,
+                			"message", message,
+                		},
+                		statusCode: {
+                			401: function(){
+                				// do something
+                				alert("Ground control to Major Tom");
+                			}
+                		},
+                		success: function successResponse(response){
+                			// do something 
+                			alert("HOORAY");
+                		}
+                	});
+                }
+
             </script>
 
 	</body>

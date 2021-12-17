@@ -14,3 +14,6 @@ def index(request):
         'technologies':technologies,
     }
     return render(request, "siteApp/index.html", context)
+
+def sendEmail(request):
+    return HTTPResponse(status=200)
