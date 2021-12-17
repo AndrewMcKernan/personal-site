@@ -4,12 +4,22 @@ from django.db import models
 
 class MainService(models.Model):
     name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Main Services"
     
 class Technology(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='media/images/')
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Technologies"
     
-class Subservice(models.Model):
+class SubService(models.Model):
     name = models.CharField(max_length=200)
     main_service = models.ForeignKey(MainService, on_delete=models.CASCADE)
-    technologies = models.ManyToManyField(Technology)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Sub Services"

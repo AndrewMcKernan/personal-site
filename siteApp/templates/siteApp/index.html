@@ -20,8 +20,9 @@
 
 				<!-- Header -->
 					<header id="header">
-						<div class="logo">
-							<span class="icon fa-gem"></span>
+						<div>
+							<!-- <span class="icon fa-gem"></span> -->
+                            <img style="border-radius:50%;" src="{% static 'images/small-andrew.jpg' %}"></img>
 						</div>
 						<div class="content">
 							<div class="inner">
@@ -46,7 +47,7 @@
 						<!-- Intro -->
 							<article id="intro">
 								<h2 class="major">Intro</h2>
-								<span class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></span>
+								<span class="image main"><img src="{% static 'images/intro.jpg' %}" alt="" /></span>
 								<p>Andrew was educated at the University of Alberta in the Computer Engineering: Software Specialization program. During his education, he worked with world class companies such as Nokia and PCL Construction, and graduated in 2019. After graduation, he worked with leading AI and machine learning experts at <a href="https://www.carbeeza.com/">Carbeeza</a>, before finally striking out into the world of freelance work. For more detail on his work, check out his <a href="#portfolio">awesome portfolio</a>, or the <a href="#services">services he provides</a>.</p>
 								<p>In his spare time, Andrew keeps busy by <a href="https://chrygore.itch.io/">building video games</a> as a fun and creative way to keep his coding skills sharp. He enjoys tabletop games of all kinds, and loves to volunteer his time with local community organizations, as well as events such as <a href="https://www.extra-life.org/">Extra Life.</a> </p>
 							</article>
@@ -54,52 +55,124 @@
 						<!-- services -->
 							<article id="services">
 								<h2 class="major">Services</h2>
-								<!-- <span class="image main"><img src="{% static 'images/pic02.jpg' %}" alt="" /></span> -->
 								<ul>
-									<li>Web Development
+									{% for mainService in mainServices %}
+                                    <li>
+                                        {{ mainService.name }}
                                         <ul>
-                                            <li>Personal Websites</li>
-                                            <li>Full Stack Development</li>
-                                            <li>Back-end Development</li>
-                                            <li>Front-end Development</li>
+                                        {% for subService in subServices %}
+                                            <!-- TODO: Link this to the contact page with info to set the dropdowns -->
+                                            {% if mainService.name == subService.main_service.name %}
+                                            <li><a href="#contact" onclick="contactService('{{ subService.name }}')">{{ subService.name }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
                                         </ul>
                                     </li>
-                                    <li>Mobile Apps
-                                        <ul>
-                                            <li>Android Applications</li>
-                                            <li>Xamarin Cross Platform Applications</li>
-                                        </ul>
-                                    </li>
-									<li>APIs
-                                        <ul>
-                                            <li>Django REST Framework</li>
-                                            <li>Spring/Boot</li>
-                                            <li>ASP.NET</li>
-                                        </ul>
-                                    </li>
-									<li>Game Development
-                                        <ul>
-                                            <li>Unity</li>
-                                            <li>Pygame</li>
-                                        </ul>
-                                    </li>
+                                    {% endfor %}
+                                    <!-- <li>Web Development -->
+                                        <!-- <ul> -->
+                                            <!-- <li>Personal Websites</li> -->
+                                            <!-- <li>Full Stack Development</li> -->
+                                            <!-- <li>Back-end Development</li> -->
+                                            <!-- <li>Front-end Development</li> -->
+                                        <!-- </ul> -->
+                                    <!-- </li> -->
+                                    <!-- <li>Mobile Apps -->
+                                        <!-- <ul> -->
+                                            <!-- <li>Android Applications</li> -->
+                                            <!-- <li>Xamarin Cross Platform Applications</li> -->
+                                        <!-- </ul> -->
+                                    <!-- </li> -->
+									<!-- <li>APIs -->
+                                        <!-- <ul> -->
+                                            <!-- <li>Django REST Framework</li> -->
+                                            <!-- <li>Spring/Boot</li> -->
+                                            <!-- <li>ASP.NET</li> -->
+                                        <!-- </ul> -->
+                                    <!-- </li> -->
+									<!-- <li>Game Development -->
+                                        <!-- <ul> -->
+                                            <!-- <li>Unity</li> -->
+                                            <!-- <li>Pygame</li> -->
+                                        <!-- </ul> -->
+                                    <!-- </li> -->
 								</ul>
 							</article>
 
 						<!-- portfolio -->
 							<article id="portfolio">
-								<h2 class="major">Work Experience</h2>
-								<span class="image main"><img src="{% static 'images/pic03.jpg' %}" alt="" /></span>
-								<p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p>
+                                <h2 class="major">Work Experience</h2>
+                                <section style="display:grid;">
+                                    
+                                    <div style="grid-column: 1; width: 95%;">
+                                        <h3><a href="https://www.interdynamix.com/">Interdynamix</a> - Systems Engineer</h3>
+                                        <p>Sept 2019 - July 2021</p>
+                                        <ul>
+                                            <li>Created inventory management system using Django and PostgreSQL</li>
+                                            <li>Full stack engineer supporting Carbeeza using Spring and Thymeleaf</li>
+                                        </ul>
+                                    </div>
+                                    <div style="grid-column: 2;">
+                                        <h3><a href="https://www.pcl.com/">PCL Construction</a> - Software Development Student</h3>
+                                        <p>May - Dec 2018</p>
+                                        <ul>
+                                            <li>Developed PCL Craftlink on iOS and Android platforms using Xamarin</li>
+                                            <li>Revamped UI and back end of internal web applications using HTML5, JavaScript, and ASP.NET Razor</li>
+                                        </ul>
+                                    </div>
+                                    <div style="grid-column: 1; width: 95%;">
+                                        <h3><a href="https://www.nokia.com/">Nokia</a> - Hardware Support</h3>
+                                        <p>Jan - Sept 2017</p>
+                                        <ul>
+                                            <li>Debugged, updated, and tested a C# data analysis application for the hardware team to analyze failure rates of hardware components</li>
+                                            <li>Created Excel add-ons using Visual Basic for Applications (VBA) scripts to automate data visualization of exported SQL databases</li>
+                                        </ul>
+                                    </div>
+                                    <div style="grid-column: 2;">
+                                        <h3><a href="https://megasys.com/">MegaSys Computer Technologies</a> - Quality Assurance</h3>
+                                        <p>May - Sept 2016</p>
+                                        <ul>
+                                            <li>Performed intensive debugging processes and procedures to ensure quality in the MegaSys Telenium Client Suite</li>
+                                            <li>Utilized C#, SQL, XAML, and WPF to develop a database management application for the development team's use</li>
+                                        </ul>
+                                    </div>
+                                    
+                                </section>
                                 <h2 class="major">Freelance Projects</h2>
+                                <section style="display:grid;">
+                                    <div style="grid-column: 1; width: 95%;">
+                                        <h3>Specialist Communication Platform</h3>
+                                        <p>Released: November 2021</p>
+                                        <p>A secure communiucation platform for specialists communicating with other specialists. Built using Django. Details have been omitted by the request of the client.</p>
+                                    </div>
+                                    <div style="grid-column: 2;">
+                                        <h3><a href="https://play.google.com/store/apps/details?id=com.edmontonezpfcc.EDM_ICU_MOBILE&ah=CF9Pf7FLRlX8svjdXJP4C35L554">Edmonton ICU</a></h3>
+                                        <p>Released: August 2020</p>
+                                        <p>An Android/iOS application built to provide information and answer questions for individuals and families who have loved ones in the ICU. Covers hospitals across the Edmonton area. Built using Xamarin.</p>
+                                    </div>
+                                </section>
                                 <h2 class="major">Technologies and Languages</h2>
+                                <section style="display:grid;">
+                                {% for tech in technologies %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                <div style="grid-column: 1; width: 95%;">
+                                    <li>{{ tech.name }}</li>
+                                </div>
+                                {% else %}
+                                <div style="grid-column: 2;">
+                                    <li>{{ tech.name }}</li>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                </section>
 							</article>
 
 						<!-- Contact -->
 							<article id="contact">
 								<h2 class="major">Contact</h2>
 								<form method="post" action="#">
-									<div class="fields">
+									{% csrf_token %}
+                                    <div class="fields">
 										<div class="field half">
 											<label for="name">Name</label>
 											<input type="text" name="name" id="name" />
@@ -109,6 +182,15 @@
 											<input type="text" name="email" id="email" />
 										</div>
 										<div class="field">
+                                            <label for="services_select">Desired Service</label>
+											<select name="services_select" id="services_select">
+                                                <option value="other">Just saying hi!</option>
+                                                {% for service in subServices %}
+                                                <option value="{{ service.name }}">{{ service.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="field">
 											<label for="message">Message</label>
 											<textarea name="message" id="message" rows="4"></textarea>
 										</div>
@@ -119,10 +201,10 @@
 									</ul>
 								</form>
 								<ul class="icons">
-									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="https://github.com/AndrewMcKernan" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                                    <li><a href="https://chrygore.itch.io/" class="icon brands fa-itch-io"><span class="label">Itch</span></a></li>
+                                    <li><a href="https://stackoverflow.com/users/6552642/chrygore" class="icon brands fa-stack-overflow"><span class="label">Stack Overflow</span></a></li>
+                                    <li><a href="https://www.linkedin.com/in/andrew-mckernan/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
 								</ul>
 							</article>
 
@@ -386,6 +468,11 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
+            <script type="text/javascript">
+                function contactService(serviceName){
+                    $("#services_select").val(serviceName);
+                }
+            </script>
 
 	</body>
 </html>
