@@ -4,6 +4,7 @@ from django.db import models
 
 class MainService(models.Model):
     name = models.CharField(max_length=200)
+    order = models.IntegerField()
     def __str__(self):
         return self.name
     class Meta:
