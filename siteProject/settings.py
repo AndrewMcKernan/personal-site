@@ -112,6 +112,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# change this to 'django.core.mail.backends.smtp.EmailBackend' when in production with an smtp server set up. 
+# when in testing, leave it as 'django.core.mail.backends.console.EmailBackend' (sends emails to stdout)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

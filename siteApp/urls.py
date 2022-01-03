@@ -6,5 +6,5 @@ app_name = "siteApp"
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('submitEmail', views.sendEmail, name="sendEmail"),
+    path('sendEmail', views.sendEmail, name="sendEmail"),
 ]

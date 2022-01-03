@@ -41,7 +41,7 @@
 								<li style="width:25%;"><a href="#intro">Intro</a></li>
 								<li style="width:25%;"><a href="#services">Services</a></li>
 								<li style="width:25%;"><a href="#portfolio">Portfolio</a></li>
-								<li style="width:25%;"><a href="#contact">Contact</a></li>
+								<li style="width:25%;"><a onclick="showContactForm()" href="#contact">Contact</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
 						</nav>
@@ -184,16 +184,17 @@
 						<!-- Contact -->
 							<article id="contact">
 								<h2 class="major">Contact</h2>
-								<form method="post" action="#">
+								<form id="contact-form" method="post" onsubmit="submitEmailForm(); return false;">
 									{% csrf_token %}
                                     <div class="fields">
 										<div class="field half">
 											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
+											<input required type="text" name="name" id="name" />
 										</div>
 										<div class="field half">
 											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
+											<input required type="email" name="email" id="email" />
+                                            <p id="email-error" style="color:red;display:none;">The email address you entered is invalid.</p>
 										</div>
 										<div class="field">
                                             <label for="services_select">Desired Service</label>
@@ -206,7 +207,7 @@
                                         </div>
                                         <div class="field">
 											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="4"></textarea>
+											<textarea required name="message" id="message" rows="4"></textarea>
 										</div>
 									</div>
 									<ul class="actions">
@@ -214,6 +215,9 @@
 										<li><input type="reset" value="Reset" /></li>
 									</ul>
 								</form>
+                                <div id="email-sent" style="display:none;">
+                                    <p>Your message has been sent! I will get back to you as soon as I can. In the meantime, check me out on my socials below.</p>
+                                </div>
 								<ul class="icons">
 									<li><a href="https://github.com/AndrewMcKernan" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
                                     <li><a href="https://chrygore.itch.io/" class="icon brands fa-itch-io"><span class="label">Itch</span></a></li>
@@ -254,10 +258,19 @@
                 function contactService(serviceName){
                     $("#services_select").val(serviceName);
                 }
+                
+                function showContactForm(){
+                    if ($("#email-sent").is(":hidden")){
+                        $("#email-sent").hide();
+                        $("#contact-form").show();
+                        $("#contact-form").trigger("reset");
+                        $("#email-error").hide();
+                    }
+                }
 
                 function submitEmailForm(){
                 	event.preventDefault();
-                	event.stopPropogation();
+                	event.stopPropagation();
                 	var name = $('#name').val();
                 	var email = $('#email').val();
                 	var service = $('#services_select').val();
@@ -273,14 +286,15 @@
                 			"message": message,
                 		},
                 		statusCode: {
-                			401: function(){
+                			400: function(){
                 				// do something
-                				alert("Ground control to Major Tom");
+                				$("#email-error").show();
                 			}
                 		},
                 		success: function successResponse(response){
-                			// do something 
-                			alert("HOORAY");
+                			$("#email-sent").show();
+                            $("#contact-form").hide();
+                            $("#email-error").hide();
                 		}
                 	});
                 }
