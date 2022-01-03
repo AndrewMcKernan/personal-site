@@ -12,6 +12,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
 		<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
+        <style>
+            .accordion__content{
+                overflow: hidden;
+                max-height: 0;
+                transition: max-height 1.0s
+            }
+        </style>
 	</head>
 	<body class="is-preload">
 
@@ -100,70 +107,78 @@
 
 						<!-- portfolio -->
 							<article id="portfolio">
-                                <h2 class="major">Work Experience</h2>
-                                <section style="display:grid;">
-                                    
-                                    <div style="grid-column: 1; width: 95%;">
-                                        <h3><a href="https://www.interdynamix.com/">Interdynamix</a> - Systems Engineer</h3>
-                                        <p>Sept 2019 - July 2021</p>
-                                        <ul>
-                                            <li>Created inventory management system using Django and PostgreSQL</li>
-                                            <li>Full stack engineer supporting Carbeeza using Spring and Thymeleaf</li>
-                                        </ul>
-                                    </div>
-                                    <div style="grid-column: 2;">
-                                        <h3><a href="https://www.pcl.com/">PCL Construction</a> - Software Development Student</h3>
-                                        <p>May - Dec 2018</p>
-                                        <ul>
-                                            <li>Developed PCL Craftlink on iOS and Android platforms using Xamarin</li>
-                                            <li>Revamped UI and back end of internal web applications using HTML5, JavaScript, and ASP.NET Razor</li>
-                                        </ul>
-                                    </div>
-                                    <div style="grid-column: 1; width: 95%;">
-                                        <h3><a href="https://www.nokia.com/">Nokia</a> - Hardware Support</h3>
-                                        <p>Jan - Sept 2017</p>
-                                        <ul>
-                                            <li>Debugged, updated, and tested a C# data analysis application for the hardware team to analyze failure rates of hardware components</li>
-                                            <li>Created Excel add-ons using Visual Basic for Applications (VBA) scripts to automate data visualization of exported SQL databases</li>
-                                        </ul>
-                                    </div>
-                                    <div style="grid-column: 2;">
-                                        <h3><a href="https://megasys.com/">MegaSys Computer Technologies</a> - Quality Assurance</h3>
-                                        <p>May - Sept 2016</p>
-                                        <ul>
-                                            <li>Performed intensive debugging processes and procedures to ensure quality in the MegaSys Telenium Client Suite</li>
-                                            <li>Utilized C#, SQL, XAML, and WPF to develop a database management application for the development team's use</li>
-                                        </ul>
-                                    </div>
-                                    
-                                </section>
-                                <h2 class="major">Freelance Projects</h2>
-                                <section style="display:grid;">
-                                    <div style="grid-column: 1; width: 95%;">
-                                        <h3>Specialist Communication Platform</h3>
-                                        <p>Released: November 2021</p>
-                                        <p>A secure communiucation platform for specialists communicating with other specialists. Built using Django. Details have been omitted by the request of the client.</p>
-                                    </div>
-                                    <div style="grid-column: 2;">
-                                        <h3><a href="https://play.google.com/store/apps/details?id=com.edmontonezpfcc.EDM_ICU_MOBILE&ah=CF9Pf7FLRlX8svjdXJP4C35L554">Edmonton ICU</a></h3>
-                                        <p>Released: August 2020</p>
-                                        <p>An Android/iOS application built to provide information and answer questions for individuals and families who have loved ones in the ICU. Covers hospitals across the Edmonton area. Built using Xamarin.</p>
-                                    </div>
-                                </section>
-                                <h2 class="major">Technologies and Languages</h2>
-                                <section style="display:grid;">
-                                {% for tech in technologies %}
-                                {% if forloop.counter0|divisibleby:2 %}
-                                <div style="grid-column: 1; width: 95%;">
-                                    <li>{{ tech.name }}</li>
+                                <div class="accordion">
+                                <a href="#" onclick="return false;"><h2 class="major" onclick="changeView('experience_section')" >Work Experience</h2></a>
+                                <div class="accordion__content" id="experience_section">
+                                    <section style="display:grid;">
+                                        
+                                        <div style="grid-column: 1; width: 95%;">
+                                            <h3><a href="https://www.interdynamix.com/">Interdynamix</a> - Systems Engineer</h3>
+                                            <p>Sept 2019 - July 2021</p>
+                                            <ul>
+                                                <li>Created inventory management system using Django and PostgreSQL</li>
+                                                <li>Full stack engineer supporting Carbeeza using Spring and Thymeleaf</li>
+                                            </ul>
+                                        </div>
+                                        <div style="grid-column: 2;">
+                                            <h3><a href="https://www.pcl.com/">PCL Construction</a> - Software Development Student</h3>
+                                            <p>May - Dec 2018</p>
+                                            <ul>
+                                                <li>Developed PCL Craftlink on iOS and Android platforms using Xamarin</li>
+                                                <li>Revamped UI and back end of internal web applications using HTML5, JavaScript, and ASP.NET Razor</li>
+                                            </ul>
+                                        </div>
+                                        <div style="grid-column: 1; width: 95%;">
+                                            <h3><a href="https://www.nokia.com/">Nokia</a> - Hardware Support</h3>
+                                            <p>Jan - Sept 2017</p>
+                                            <ul>
+                                                <li>Debugged, updated, and tested a C# data analysis application for the hardware team to analyze failure rates of hardware components</li>
+                                                <li>Created Excel add-ons using Visual Basic for Applications (VBA) scripts to automate data visualization of exported SQL databases</li>
+                                            </ul>
+                                        </div>
+                                        <div style="grid-column: 2;">
+                                            <h3><a href="https://megasys.com/">MegaSys Computer Technologies</a> - Quality Assurance</h3>
+                                            <p>May - Sept 2016</p>
+                                            <ul>
+                                                <li>Performed intensive debugging processes and procedures to ensure quality in the MegaSys Telenium Client Suite</li>
+                                                <li>Utilized C#, SQL, XAML, and WPF to develop a database management application for the development team's use</li>
+                                            </ul>
+                                        </div>
+                                        
+                                    </section>
                                 </div>
-                                {% else %}
-                                <div style="grid-column: 2;">
-                                    <li>{{ tech.name }}</li>
                                 </div>
-                                {% endif %}
-                                {% endfor %}
-                                </section>
+                                <a href="#" onclick="return false;"><h2 class="major" onclick="changeView('freelance_section')">Freelance Projects</h2></a>
+                                <div class="accordion__content"  id="freelance_section" >
+                                    <section style="display:grid;">
+                                        <div style="grid-column: 1; width: 95%;">
+                                            <h3>Specialist Communication Platform</h3>
+                                            <p>Released: November 2021</p>
+                                            <p>A secure communiucation platform for specialists communicating with other specialists. Built using Django. Details have been omitted by the request of the client.</p>
+                                        </div>
+                                        <div style="grid-column: 2;">
+                                            <h3><a href="https://play.google.com/store/apps/details?id=com.edmontonezpfcc.EDM_ICU_MOBILE&ah=CF9Pf7FLRlX8svjdXJP4C35L554">Edmonton ICU</a></h3>
+                                            <p>Released: August 2020</p>
+                                            <p>An Android/iOS application built to provide information and answer questions for individuals and families who have loved ones in the ICU. Covers hospitals across the Edmonton area. Built using Xamarin.</p>
+                                        </div>
+                                    </section>
+                                </div>
+                                <a href="#" onclick="return false;"><h2 onclick="changeView('technologies_section')" class="major">Technologies and Languages</h2></a>
+                                <div class="accordion__content"  id="technologies_section">
+                                    <section  style="display:grid;">
+                                    {% for tech in technologies %}
+                                    {% if forloop.counter0|divisibleby:2 %}
+                                    <div style="grid-column: 1; width: 95%;">
+                                        <li>{{ tech.name }}</li>
+                                    </div>
+                                    {% else %}
+                                    <div style="grid-column: 2;">
+                                        <li>{{ tech.name }}</li>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </section>
+                                </div>
 							</article>
 
 						<!-- Contact -->
@@ -228,6 +243,14 @@
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
             <script type="text/javascript">
+                function changeView(elementId){
+                    if ($('#' + elementId).css("maxHeight") == "1000px"){
+                        $('#' + elementId).css({"maxHeight":"0px"});
+                    }else{
+                        $('#' + elementId).css({"maxHeight":"1000px"});
+                    }
+                }
+                
                 function contactService(serviceName){
                     $("#services_select").val(serviceName);
                 }
@@ -246,8 +269,8 @@
                 		data:{
                 			"name": name,
                 			"email": email,
-                			"service", service,
-                			"message", message,
+                			"service": service,
+                			"message": message,
                 		},
                 		statusCode: {
                 			401: function(){
