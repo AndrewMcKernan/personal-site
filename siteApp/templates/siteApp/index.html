@@ -16,7 +16,7 @@
             .accordion__content{
                 overflow: hidden;
                 max-height: 0;
-                transition: max-height 1.0s
+                transition: max-height 0.7s
             }
         </style>
 	</head>
@@ -244,10 +244,10 @@
 			<script src="{% static 'assets/js/main.js' %}"></script>
             <script type="text/javascript">
                 function changeView(elementId){
-                    if ($('#' + elementId).css("maxHeight") == "1000px"){
+                    if ($('#' + elementId).css("maxHeight") == $('#' + elementId).prop('scrollHeight') + "px"){
                         $('#' + elementId).css({"maxHeight":"0px"});
                     }else{
-                        $('#' + elementId).css({"maxHeight":"1000px"});
+                        $('#' + elementId).css({"maxHeight":$('#' + elementId).prop('scrollHeight') + "px"});
                     }
                 }
                 
