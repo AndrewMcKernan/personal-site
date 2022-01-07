@@ -38,7 +38,7 @@ def sendEmail(request):
         send_mail(
                 'Website Form Submission Received From ' + sender_name, # Subject
                 message, # Message
-                "do_not_reply@andrewmckernan.com", # from email
+                "do-not-reply@andrewmckernan.ca", # from email
                 ["andrewmck96@gmail.com"], # to email
                 fail_silently=False,
             )
