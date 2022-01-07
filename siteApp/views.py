@@ -36,7 +36,7 @@ def sendEmail(request):
             #messages.error(request, 'The given email address is invalid.')
             return HttpResponse(status=400)
         send_mail(
-                'Website Form Submission Received', # Subject
+                'Website Form Submission Received From ' + sender_name, # Subject
                 message, # Message
                 "do_not_reply@andrewmckernan.com", # from email
                 ["andrewmck96@gmail.com"], # to email
