@@ -67,7 +67,6 @@
                                         {{ mainService.name }}
                                         <ul>
                                         {% for subService in subServices %}
-                                            <!-- TODO: Link this to the contact page with info to set the dropdowns -->
                                             {% if mainService.name == subService.main_service.name %}
                                             <li><a href="#contact" onclick="contactService('{{ subService.name }}')">{{ subService.name }}</a></li>
                                             {% endif %}
@@ -75,33 +74,6 @@
                                         </ul>
                                     </li>
                                     {% endfor %}
-                                    <!-- <li>Web Development -->
-                                        <!-- <ul> -->
-                                            <!-- <li>Personal Websites</li> -->
-                                            <!-- <li>Full Stack Development</li> -->
-                                            <!-- <li>Back-end Development</li> -->
-                                            <!-- <li>Front-end Development</li> -->
-                                        <!-- </ul> -->
-                                    <!-- </li> -->
-                                    <!-- <li>Mobile Apps -->
-                                        <!-- <ul> -->
-                                            <!-- <li>Android Applications</li> -->
-                                            <!-- <li>Xamarin Cross Platform Applications</li> -->
-                                        <!-- </ul> -->
-                                    <!-- </li> -->
-									<!-- <li>APIs -->
-                                        <!-- <ul> -->
-                                            <!-- <li>Django REST Framework</li> -->
-                                            <!-- <li>Spring/Boot</li> -->
-                                            <!-- <li>ASP.NET</li> -->
-                                        <!-- </ul> -->
-                                    <!-- </li> -->
-									<!-- <li>Game Development -->
-                                        <!-- <ul> -->
-                                            <!-- <li>Unity</li> -->
-                                            <!-- <li>Pygame</li> -->
-                                        <!-- </ul> -->
-                                    <!-- </li> -->
 								</ul>
 							</article>
 
@@ -112,6 +84,23 @@
                                 <div class="accordion__content" id="experience_section">
                                     <section style="display:grid;">
                                         
+                                        <div style="grid-column: 1; width: 95%;">
+                                            <h3><a href="https://www.offerd.com/">Offerd</a> - Full-stack Developer (Contract)</h3>
+                                            <p>Dec 2022 - Present</p>
+                                            <ul>
+                                                <li>Applied Mendix to update, support, and expand client's web application</li>
+                                                <li>Performed systems administration for client's CRM software, and created automations that allowed for seamless integration with the client's web app</li>
+                                                <li>Leveraged Python and psycopg2 to automate updates to the application's PostgreSQL server</li>
+                                            </ul>
+                                        </div>
+                                        <div style="grid-column: 2;">
+                                            <h3><a href="https://www.andersontaylor.com/">Anderson Taylor</a> - .NET Developer (Contract)</h3>
+                                            <p>Aug 2022 - Oct 2022</p>
+                                            <ul>
+                                                <li>Updated and modernized client's ASP.NET web application, fixing bugs and enhancing features </li>
+                                                <li>Worked with Bootstrap, JavaScript, and basic CSS to clean up and revamp data visualizations, UI, and UX</li>
+                                            </ul>
+                                        </div>
                                         <div style="grid-column: 1; width: 95%;">
                                             <h3>Anonymous Client - Data Solution Developer (Contract)</h3>
                                             <p>Jan - Mar 2022</p>
@@ -126,6 +115,8 @@
                                             <ul>
                                                 <li>Created inventory management system using Django and PostgreSQL</li>
                                                 <li>Full stack engineer supporting Carbeeza using Spring and Thymeleaf</li>
+                                                <li>Provided on-call enterprise IT support to various retail and technical clients across Canada</li>
+                                                <li>Performed physical server setup at client sites</li>
                                             </ul>
                                         </div>
                                         <div style="grid-column: 1; width: 95%;">
@@ -160,16 +151,21 @@
                                 <div class="accordion__content"  id="freelance_section" >
                                     <section style="display:grid;">
                                         <div style="grid-column: 1; width: 95%;">
+                                            <h3><a href="#portfolio">Three Axis Productions</a></h3>
+                                            <p>Coming Soon...</p>
+                                            <p>An elegant and straightforward site to display the media work performed by Three Axis Productions. Staff members are easily able to modify, add, or remove text and video content in every area of the site, allowing them to present their company's work in the best possible light. Built using Django.</p>
+                                        </div>
+                                        <div style="grid-column: 2;">
                                             <h3><a href="https://skillstuneup.com">Skills Tune Up</a></h3>
                                             <p>Released: April 2022</p>
                                             <p>A simple and streamlined landing page, allowing individuals seeking a career transition to fill out a questionnaire assessing their skillset and educational needs. The content of the home page and questionnaire are modifiable by administrators. Built using Django.</p>
                                         </div>
-                                        <div style="grid-column: 2;">
+                                        <div style="grid-column: 1; width: 95%;">
                                             <h3>Specialist Communication Platform</h3>
                                             <p>Released: November 2021</p>
                                             <p>A secure communiucation platform for specialists communicating with other specialists. Built using Django. Details have been omitted by the request of the client.</p>
                                         </div>
-                                        <div style="grid-column: 1; width: 95%;">
+                                        <div style="grid-column: 2;">
                                             <h3><a href="https://play.google.com/store/apps/details?id=com.edmontonezpfcc.EDM_ICU_MOBILE&ah=CF9Pf7FLRlX8svjdXJP4C35L554">Edmonton ICU</a></h3>
                                             <p>Released: August 2020</p>
                                             <p>An Android/iOS application built to provide information and answer questions for individuals and families who have loved ones in the ICU. Covers hospitals across the Edmonton area. Built using Xamarin.</p>
