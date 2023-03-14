@@ -38,8 +38,8 @@ def sendEmail(request):
         send_mail(
                 'Website Form Submission Received From ' + sender_name, # Subject
                 message, # Message
-                "do-not-reply@andrewmckernan.ca", # from email
-                ["andrewmck96@gmail.com"], # to email
+                "dev@andrewmckernan.ca", # from email
+                ["dev@andrewmckernan.ca"], # to email
                 fail_silently=False,
             )
         return HttpResponse(status=200)
