@@ -1,0 +1,34 @@
+div.fixedBar {
+    position: fixed;
+    bottom: 0;
+    margin:0;
+    width: 100vw;
+    height: 5%;
+    min-height: 50px;
+    border: 2px solid #ffffff;
+    background-color: #8a011f;
+    z-index: 1000;
+    box-sizing: border-box;
+    display: table;
+}
+
+div.innerComponent {
+    display: table-cell;
+    vertical-align: middle;
+    width: 20%;
+    text-align: center;
+    padding-left: 0;
+    border: 1px solid #ffffff;
+}
+
+div.innerComponent > p {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.innerComponent > a {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
