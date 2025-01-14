@@ -16,7 +16,7 @@ div.fixedBar {
 div.innerComponent {
     display: table-cell;
     vertical-align: middle;
-    width: 25%;
+    width: 43%;
     text-align: center;
     padding-left: 0;
     border: 1px solid #ffffff;
@@ -32,4 +32,99 @@ div.innerComponent > a {
     margin-bottom: 0;
     text-align: center;
     color: #ffffff;
+}
+
+div.gubagooComponent {
+    display: table-cell;
+    vertical-align: middle;
+    width: 43%;
+    text-align: center;
+    padding-left: 0;
+    border: 1px solid #ffffff;
+}
+
+div.gubagooComponent > p {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.gubagooComponent > a {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.complyAutoComponent {
+    display: table-cell;
+    vertical-align: middle;
+    width: 7%;
+    text-align: center;
+    padding-left: 0;
+    border: 1px solid #ffffff;
+}
+
+div.complyAutoComponent > p {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.complyAutoComponent > a {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.audioEyeComponent {
+    display: table-cell;
+    vertical-align: middle;
+    width: 7%;
+    text-align: center;
+    padding-left: 0;
+    border: 1px solid #ffffff;
+}
+
+div.audioEyeComponent > p {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+div.audioEyeComponent > a {
+    margin-bottom: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+@media screen and (max-width: 1150px) {
+    div.complyAutoComponent {
+        width: 10%;
+    }
+
+    div.audioEyeComponent {
+        width: 10%;
+    }
+    div.innerComponent {
+        width: 40%;
+    }
+    div.gubagooComponent {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 619px) {
+    div.complyAutoComponent {
+        width: 10%;
+    }
+
+    div.audioEyeComponent {
+        width: 10%;
+    }
+    div.innerComponent {
+        width: 65%;
+    }
+    div.gubagooComponent {
+        width: 15%;
+    }
 }
