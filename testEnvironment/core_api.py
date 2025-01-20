@@ -30,9 +30,10 @@ def get_authorization_code():
             logger.info("We are either waiting for tokens, or we don't need to update, so we will not request more.")
             return
         core_token.state = uuid.uuid4().hex
-        requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
-                     redirect_uri, "response_type": response_type, "state": core_token.state})
+        result = requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
+                              redirect_uri, "response_type": response_type, "state": core_token.state})
         logger.info("Requested a new authorization code.")
+        logger.ingo(str(result))
         core_token.waiting_for_tokens = True
         core_token.save()
 
