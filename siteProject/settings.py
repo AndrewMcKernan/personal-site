@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import pathlib
 from pathlib import Path
+from logging.handlers import RotatingFileHandler
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -126,3 +128,48 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+pathlib.Path("logs").mkdir(exist_ok=True)
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'requests-file': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', 'requests.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 3,  # Keep 3 backup files
+            'formatter': 'verbose',
+        },
+        'app-file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', 'testEnvironment.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 3,  # Keep 3 backup files
+            'formatter': 'app-verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['requests-file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'testEnvironment': {
+            'handlers': ['app-file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+        'app-verbose': {
+            'format': '{asctime}; {levelname}; {pathname}; function: {funcName}; {message}',
+            'style': '{',
+        },
+    },
+}
