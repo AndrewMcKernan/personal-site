@@ -16,7 +16,7 @@ response_type = "code"
 def get_authorization_code():
     logger = logging.getLogger(__name__)
     base_uri = "https://api-identity.bqecore.com/idp"
-    if CoreTokens.filter(_singleton=True).exists():
+    if CoreTokens.objects.filter(_singleton=True).exists():
         core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
         with transaction.atomic():
             # TODO: probably need to make timezone aware
