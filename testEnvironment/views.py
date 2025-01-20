@@ -8,7 +8,7 @@ def index(request):
     return render(request, "testEnvironment/index.html")
 
 
-def request_new_tokens():
+def request_new_tokens(request):
     get_authorization_code()
     return redirect("testEnvironment:index")
 
