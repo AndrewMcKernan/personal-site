@@ -60,6 +60,7 @@ def get_refresh_and_access_tokens(request):
             core_token.waiting_for_tokens = False
             core_token.save()
             return
+        core_token.token_request_code = code
         logger.info("Requesting refresh and access tokens.")
         response = requests.post(base_uri, params={
             "code": core_token.token_request_code,
