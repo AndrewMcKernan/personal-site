@@ -130,46 +130,46 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 pathlib.Path("logs").mkdir(exist_ok=True)
-# LOGGING = {
-#     'version': 1,
-#     'handlers': {
-#         'requests-file': {
-#             'level': 'WARNING',
-#             'class': 'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join('logs', 'requests.log'),
-#             'maxBytes': 1024 * 1024 * 5,  # 5 MB
-#             'backupCount': 3,  # Keep 3 backup files
-#             'formatter': 'verbose',
-#         },
-#         'app-file': {
-#             'level': 'INFO',
-#             'class': 'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join('logs', 'testEnvironment.log'),
-#             'maxBytes': 1024 * 1024 * 5,  # 5 MB
-#             'backupCount': 3,  # Keep 3 backup files
-#             'formatter': 'app-verbose',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['requests-file'],
-#             'level': 'WARNING',
-#             'propagate': True,
-#         },
-#         'testEnvironment': {
-#             'handlers': ['app-file'],
-#             'level': 'INFO',
-#             'propagate': True,
-#         },
-#     },
-#     'formatters': {
-#         'verbose': {
-#             'format': '{asctime} {levelname} {message}',
-#             'style': '{',
-#         },
-#         'app-verbose': {
-#             'format': '{asctime}; {levelname}; {pathname}; function: {funcName}; {message}',
-#             'style': '{',
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'requests-file': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', 'requests.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 3,  # Keep 3 backup files
+            'formatter': 'verbose',
+        },
+        'app-file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', 'testEnvironment.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 3,  # Keep 3 backup files
+            'formatter': 'app-verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['requests-file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'testEnvironment': {
+            'handlers': ['app-file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+        'app-verbose': {
+            'format': '{asctime}; {levelname}; {pathname}; function: {funcName}; {message}',
+            'style': '{',
+        },
+    },
+}
