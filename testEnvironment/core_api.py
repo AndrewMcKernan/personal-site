@@ -15,15 +15,15 @@ response_type = "code"
 
 def get_authorization_code():
     logger = logging.getLogger(__name__)
-    base_uri = "https://api-identity.bqecore.com/idp"
+    base_uri = "https://api-identity.bqecore.com/idp/connect/authorize"
     core_token = None
-    if CoreTokens.objects.filter(_singleton=True).exists():
-        core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
-    else:
-        core_token = CoreTokens()
-        core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc)
-        core_token.access_token_expiry = datetime.datetime.now(timezone.utc)
     with transaction.atomic():
+        if CoreTokens.objects.filter(_singleton=True).exists():
+            core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
+        else:
+            core_token = CoreTokens()
+            core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc)
+            core_token.access_token_expiry = datetime.datetime.now(timezone.utc)
         # TODO: probably need to make timezone aware
         # if we're waiting, or we don't need to update, then don't request another one
         if core_token.waiting_for_tokens or core_token.refresh_token_expiry > datetime.datetime.now(timezone.utc):
@@ -33,13 +33,18 @@ def get_authorization_code():
         result = requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
                               redirect_uri, "response_type": response_type, "state": core_token.state})
         logger.info("Requested a new authorization code.")
-        logger.ingo(str(result))
+        logger.info(str(result))
+        if result.status_code != 200:
+            logger.error("Failed to request a new authorization code.")
+            core_token.waiting_for_tokens = False
+            core_token.save()
+            return
         core_token.waiting_for_tokens = True
         core_token.save()
 
 
 def get_refresh_and_access_tokens(request):
-    # TODO: compare the state value from the request to the state value we set, and then set the code response
+    # compare the state value from the request to the state value we set, and then set the code response
     logger = logging.getLogger(__name__)
     if request.method == "POST":
         logger.info("POST request received.")
@@ -47,8 +52,8 @@ def get_refresh_and_access_tokens(request):
         logger.info("GET request received.")
     base_uri = "https://api-identity.bqecore.com/idp/connect/token "
     code = request.GET.get('code', None)
-    core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
     with transaction.atomic():
+        core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
         if code is None:
             logger.error("Could not parse the authorization code from the callback, and therefore cannot get the "
                          "refresh and access tokens.")
@@ -56,7 +61,7 @@ def get_refresh_and_access_tokens(request):
             core_token.save()
             return
         logger.info("Requesting refresh and access tokens.")
-        response = requests.post(base_uri, {
+        response = requests.post(base_uri, params={
             "code": core_token.token_request_code,
             "redirect_uri": redirect_uri,
             "grant_type": "authorization_code",
