@@ -16,21 +16,25 @@ response_type = "code"
 def get_authorization_code():
     logger = logging.getLogger(__name__)
     base_uri = "https://api-identity.bqecore.com/idp"
+    core_token = None
     if CoreTokens.objects.filter(_singleton=True).exists():
         core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
-        with transaction.atomic():
-            # TODO: probably need to make timezone aware
-            # if we're waiting, or we don't need to update, then don't request another one
-            if core_token.waiting_for_tokens or core_token.refresh_token_expiry > datetime.datetime.now(timezone.utc):
-                logger.info("We are either waiting for tokens, or we don't need to update, so we will not request more.")
-                return
-            core_token.state = uuid.uuid4().hex
-            requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
-                         redirect_uri, "response_type": response_type, "state": core_token.state})
-            logger.info("Requested a new authorization code.")
-            core_token.waiting_for_tokens = True
-            core_token.save()
-
+    else:
+        core_token = CoreTokens()
+        core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc)
+        core_token.access_token_expiry = datetime.datetime.now(timezone.utc)
+    with transaction.atomic():
+        # TODO: probably need to make timezone aware
+        # if we're waiting, or we don't need to update, then don't request another one
+        if core_token.waiting_for_tokens or core_token.refresh_token_expiry > datetime.datetime.now(timezone.utc):
+            logger.info("We are either waiting for tokens, or we don't need to update, so we will not request more.")
+            return
+        core_token.state = uuid.uuid4().hex
+        requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
+                     redirect_uri, "response_type": response_type, "state": core_token.state})
+        logger.info("Requested a new authorization code.")
+        core_token.waiting_for_tokens = True
+        core_token.save()
 
 
 def get_refresh_and_access_tokens(request):
