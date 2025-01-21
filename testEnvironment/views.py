@@ -14,6 +14,17 @@ def request_new_tokens(request):
 
 
 def auth_callback(request):
-    get_refresh_and_access_tokens(request)
+    get_access_token(request)
     print("Auth Callback")
+    return redirect("testEnvironment:index")
+
+
+def request_refresh_token(request):
+    result = get_refresh_code_uri()
+    return redirect(result)
+
+
+def refresh_auth_callback(request):
+    get_refresh_token(request)
+    print("Refresh Auth Callback")
     return redirect("testEnvironment:index")
