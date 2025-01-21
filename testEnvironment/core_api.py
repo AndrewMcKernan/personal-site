@@ -9,7 +9,7 @@ from django.db import transaction
 
 
 client_id = "eA172bI8p3IQFDxLrZuv6oTbHIe2MSat.apps.bqe.com"  # TODO: store in constants manager or config file
-scope = "offline_access"
+scope = "readwrite:core"
 redirect_uri = "https://andrewmckernan.ca/testEnvironment/callback"
 response_type = "code"
 # TODO: determine what we should set for the state value, if anything
@@ -26,11 +26,6 @@ def get_authorization_code_uri():
             core_token = CoreTokens()
             core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc)
             core_token.access_token_expiry = datetime.datetime.now(timezone.utc)
-        # TODO: remove these comments. Given the manual nature, we don't need to check for race conditions
-        # if we're waiting, or we don't need to update, then don't request another one
-        # if core_token.waiting_for_tokens or core_token.refresh_token_expiry > datetime.datetime.now(timezone.utc):
-        #     logger.info("We are either waiting for tokens, or we don't need to update, so we will not request more.")
-        #     return
         core_token.state = uuid.uuid4().hex
         final_url = base_uri + urllib.parse.urlencode(
             {"client_id": client_id, "scope": scope, "redirect_uri":
@@ -71,16 +66,16 @@ def get_refresh_and_access_tokens(request):
         core_token.access_token = json_data.get("access_token")
         core_token.access_token_expiry = datetime.datetime.now(timezone.utc) + \
                                          datetime.timedelta(seconds=json_data.get("expires_in"))
-        core_token.refresh_token = json_data.get("refresh_token")
-        core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc) + \
-                                          datetime.timedelta(seconds=json_data.get("refresh_token_expires_in"))
+        # core_token.refresh_token = json_data.get("refresh_token")
+        # core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc) + \
+        #                                   datetime.timedelta(seconds=json_data.get("refresh_token_expires_in"))
         # core_token.endpoint = json_data.get("endpoint")
         # core_token.access_token_type = json_data.get("token_type")
         core_token.save()
         logger.info("Tokens received.")
         logger.info("Access token: " + str(core_token.access_token))
         logger.info("Access token expiry: " + str(core_token.access_token_expiry))
-        logger.info("Endpoint: " + str(core_token.access_token_expiry))
-        logger.info("Refresh token: " + str(core_token.refresh_token))
-        logger.info("Refresh token expiry: " + str(core_token.refresh_token_expiry))
+        # logger.info("Endpoint: " + str(core_token.access_token_expiry))
+        # logger.info("Refresh token: " + str(core_token.refresh_token))
+        # logger.info("Refresh token expiry: " + str(core_token.refresh_token_expiry))
     pass
