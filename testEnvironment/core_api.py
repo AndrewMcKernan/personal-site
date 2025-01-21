@@ -69,13 +69,14 @@ def get_refresh_and_access_tokens(request):
         # core_token.refresh_token = json_data.get("refresh_token")
         # core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc) + \
         #                                   datetime.timedelta(seconds=json_data.get("refresh_token_expires_in"))
-        # core_token.endpoint = json_data.get("endpoint")
-        # core_token.access_token_type = json_data.get("token_type")
+        core_token.endpoint = json_data.get("endpoint")
+        core_token.access_token_type = json_data.get("token_type")
         core_token.save()
         logger.info("Tokens received.")
         logger.info("Access token: " + str(core_token.access_token))
         logger.info("Access token expiry: " + str(core_token.access_token_expiry))
-        # logger.info("Endpoint: " + str(core_token.access_token_expiry))
+        logger.info("Endpoint: " + str(core_token.endpoint))
+        logger.info("Token Type: " + str(core_token.access_token_type))
         # logger.info("Refresh token: " + str(core_token.refresh_token))
         # logger.info("Refresh token expiry: " + str(core_token.refresh_token_expiry))
     pass
