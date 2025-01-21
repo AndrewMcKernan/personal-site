@@ -58,13 +58,14 @@ def get_refresh_and_access_tokens(request):
             return
         core_token.token_request_code = code
         logger.info("Requesting refresh and access tokens.")
-        response = requests.post(base_uri, params={
+        response = requests.post(base_uri, data={
             "code": core_token.token_request_code,
             "redirect_uri": redirect_uri,
             "grant_type": "authorization_code",
             "client_id": client_id,
             "client_secret": "",
         }, headers={"Content-Type": "application/x-www-form-urlencoded"})
+        logger.info(str(response.request.url))
         logger.info(str(response))
         logger.info(str(response.content))
         json_data = response.json()
