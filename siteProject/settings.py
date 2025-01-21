@@ -134,7 +134,7 @@ LOGGING = {
     'version': 1,
     'handlers': {
         'requests-file': {
-            'level': 'WARNING',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join('logs', 'requests.log'),
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
@@ -153,7 +153,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['requests-file'],
-            'level': 'WARNING',
+            'level': 'INFO',
             'propagate': True,
         },
         'testEnvironment': {
