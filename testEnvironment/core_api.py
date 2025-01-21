@@ -46,10 +46,6 @@ def get_authorization_code_uri():
 def get_refresh_and_access_tokens(request):
     # compare the state value from the request to the state value we set, and then set the code response
     logger = logging.getLogger(__name__)
-    if request.method == "POST":
-        logger.info("POST request received.")
-    elif request.method == "GET":
-        logger.info("GET request received.")
     base_uri = "https://api-identity.bqecore.com/idp/connect/token "
     code = request.GET.get('code', None)
     with transaction.atomic():
@@ -69,6 +65,8 @@ def get_refresh_and_access_tokens(request):
             "client_id": client_id,
             "client_secret": "",
         }, headers={"Content-Type": "application/x-www-form-urlencoded"})
+        logger.info(str(response))
+        logger.info(str(response.content))
         json_data = response.json()
         core_token.access_token = json_data.get("access_token")
         core_token.access_token_expiry = datetime.datetime.now(timezone.utc) + \
