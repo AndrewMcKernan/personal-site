@@ -45,7 +45,8 @@ def get_refresh_and_access_tokens(request):
     logger = logging.getLogger(__name__)
     base_uri = "https://api-identity.bqecore.com/idp/connect/token"
     code = request.GET.get('code', None)
-    logger.info(request.build_absolute_uri('/').strip('/'))
+    logger.info(request.build_absolute_uri())
+    logger.info(request.body.decode('utf-8'))
     with transaction.atomic():
         core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
         if code is None:
