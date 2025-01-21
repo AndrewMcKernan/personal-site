@@ -9,8 +9,8 @@ def index(request):
 
 
 def request_new_tokens(request):
-    get_authorization_code()
-    return redirect("testEnvironment:index")
+    result = get_authorization_code_uri()
+    return redirect(result)
 
 
 def auth_callback(request):

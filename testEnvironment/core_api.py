@@ -1,5 +1,7 @@
 import datetime
 import logging
+import urllib.parse
+
 import requests, uuid
 from datetime import timezone
 from .models import CoreTokens
@@ -13,7 +15,7 @@ response_type = "code"
 # TODO: determine what we should set for the state value, if anything
 
 
-def get_authorization_code():
+def get_authorization_code_uri():
     logger = logging.getLogger(__name__)
     base_uri = "https://api-identity.bqecore.com/idp/connect/authorize"
     core_token = None
@@ -30,17 +32,15 @@ def get_authorization_code():
             logger.info("We are either waiting for tokens, or we don't need to update, so we will not request more.")
             return
         core_token.state = uuid.uuid4().hex
-        result = requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
-                              redirect_uri, "response_type": response_type, "state": core_token.state})
+        # result = requests.get(base_uri, params={"client_id": client_id, "scope": scope, "redirect_uri":
+        #                       redirect_uri, "response_type": response_type, "state": core_token.state})
+        final_url = base_uri + urllib.parse.urlencode(
+            {"client_id": client_id, "scope": scope, "redirect_uri":
+                redirect_uri, "response_type": response_type, "state": core_token.state})
         logger.info("Requested a new authorization code.")
-        logger.info(str(result))
-        if result.status_code != 200:
-            logger.error("Failed to request a new authorization code.")
-            core_token.waiting_for_tokens = False
-            core_token.save()
-            return
-        core_token.waiting_for_tokens = True
+        core_token.waiting_for_tokens = True  # TODO: potentially remove this field
         core_token.save()
+        return final_url
 
 
 def get_refresh_and_access_tokens(request):
