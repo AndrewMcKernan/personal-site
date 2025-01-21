@@ -17,7 +17,7 @@ response_type = "code"
 
 def get_authorization_code_uri():
     logger = logging.getLogger(__name__)
-    base_uri = "https://api-identity.bqecore.com/idp/connect/authorize"
+    base_uri = "https://api-identity.bqecore.com/idp/connect/authorize?"
     core_token = None
     with transaction.atomic():
         if CoreTokens.objects.filter(_singleton=True).exists():
