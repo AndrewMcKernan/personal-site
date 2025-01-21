@@ -9,7 +9,7 @@ from django.db import transaction
 
 
 client_id = "eA172bI8p3IQFDxLrZuv6oTbHIe2MSat.apps.bqe.com"  # TODO: store in constants manager or config file
-scope = "readwrite:core"
+scope = "offline_access"
 redirect_uri = "https://andrewmckernan.ca/testEnvironment/callback"
 response_type = "code"
 # TODO: determine what we should set for the state value, if anything
@@ -74,10 +74,13 @@ def get_refresh_and_access_tokens(request):
         core_token.refresh_token = json_data.get("refresh_token")
         core_token.refresh_token_expiry = datetime.datetime.now(timezone.utc) + \
                                           datetime.timedelta(seconds=json_data.get("refresh_token_expires_in"))
+        # core_token.endpoint = json_data.get("endpoint")
+        # core_token.access_token_type = json_data.get("token_type")
         core_token.save()
-        logger.info("Refresh and access tokens received.")
+        logger.info("Tokens received.")
         logger.info("Access token: " + str(core_token.access_token))
         logger.info("Access token expiry: " + str(core_token.access_token_expiry))
+        logger.info("Endpoint: " + str(core_token.access_token_expiry))
         logger.info("Refresh token: " + str(core_token.refresh_token))
         logger.info("Refresh token expiry: " + str(core_token.refresh_token_expiry))
     pass

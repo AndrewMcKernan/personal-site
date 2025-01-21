@@ -8,5 +8,7 @@ class CoreTokens(models.Model):
     token_request_code = models.CharField(max_length=50, blank=True)  # I'm not sure how long this code needs to be
     access_token = models.CharField(max_length=100, blank=True)
     access_token_expiry = models.DateTimeField()
+    endpoint = models.CharField(max_length=100, blank=True)
+    access_token_type = models.CharField(max_length=10, blank=True)
     refresh_token = models.CharField(max_length=100, blank=True)
     refresh_token_expiry = models.DateTimeField()
