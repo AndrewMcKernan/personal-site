@@ -46,7 +46,7 @@ def get_authorization_code_uri():
 def get_refresh_and_access_tokens(request):
     # compare the state value from the request to the state value we set, and then set the code response
     logger = logging.getLogger(__name__)
-    base_uri = "https://api-identity.bqecore.com/idp/connect/token "
+    base_uri = "https://api-identity.bqecore.com/idp/connect/token"
     code = request.GET.get('code', None)
     with transaction.atomic():
         core_token = CoreTokens.objects.select_for_update().get(_singleton=True)
