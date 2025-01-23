@@ -9,7 +9,7 @@ from django.db import transaction
 
 
 client_id = "eA172bI8p3IQFDxLrZuv6oTbHIe2MSat.apps.bqe.com"  # TODO: store in constants manager or config file
-scope = "readwrite:core"
+scope = "readwrite:core offline_access"
 redirect_uri = "https://andrewmckernan.ca/testEnvironment/callback"
 response_type = "code"
 # TODO: determine what we should set for the state value, if anything
@@ -96,6 +96,8 @@ def get_refresh_code_uri():
             {"client_id": client_id, "scope": "offline_access", "redirect_uri":
                 redirect_uri, "response_type": response_type, "token": core_token.access_token})
         logger.info("Requested an authentication code for a refresh token.")
+        # TODO: this is giving me an error indicating I have specified an invalid scope, despite the fact that the app
+        # is configured to allow offline access. I need to investigate this further.
         return final_url
 
 
@@ -143,4 +145,14 @@ def get_refresh_token(request):
         logger.info("Token Type: " + str(core_token.access_token_type))
         logger.info("Refresh token: " + str(core_token.refresh_token))
         # logger.info("Refresh token expiry: " + str(core_token.refresh_token_expiry))
+    pass
+
+
+'''
+Takes local users and syncs them with the Core API.
+
+This takes the local users and writes their attributes over the corresponding Client object in Core. If a linked Client
+object does not exist, then it creates a new one.
+'''
+def sync_users():
     pass
