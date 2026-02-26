@@ -127,13 +127,13 @@
 
         .match-card {
             background: white;
-            padding: 24px;
+            padding: 0;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s, font-size 0.3s, padding 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            overflow: hidden;
         }
 
         .match-card:hover {
@@ -141,13 +141,36 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        .match-card-left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: #f9f9f9;
+            border-right: 2px solid #e0e0e0;
+        }
+
+        .match-card-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
         .station-number {
             font-size: 48px;
             font-weight: 600;
             color: #667eea;
-            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            text-align: center;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+            margin: 0;
         }
 
         .players {
@@ -155,6 +178,11 @@
             color: #333;
             font-weight: 500;
             text-align: center;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+            margin: 0;
         }
 
         .vs {
@@ -334,6 +362,46 @@
             });
         }
 
+        // Calculate optimal font size for a text element within its container
+        function calculateOptimalFontSize(element, containerWidth, containerHeight, minFontSize = 8, maxFontSize = 200) {
+            // Create a test element to measure text dimensions
+            const testElement = element.cloneNode(true);
+            testElement.style.position = 'absolute';
+            testElement.style.visibility = 'hidden';
+            testElement.style.whiteSpace = 'normal';
+            testElement.style.display = 'inline-block';
+            document.body.appendChild(testElement);
+
+            let bestFontSize = minFontSize;
+            let low = minFontSize;
+            let high = maxFontSize;
+            const padding = 8; // Internal padding buffer
+
+            // Binary search for optimal font size
+            while (high - low > 0.1) {
+                const mid = (low + high) / 2;
+                testElement.style.fontSize = `${mid}px`;
+                testElement.style.maxWidth = `${containerWidth - padding}px`;
+                testElement.style.lineHeight = '1.2';
+
+                const rect = testElement.getBoundingClientRect();
+                const textWidth = rect.width;
+                const textHeight = rect.height;
+
+                // Check if text fits within container
+                if (textWidth <= containerWidth - padding && textHeight <= containerHeight - padding) {
+                    bestFontSize = mid;
+                    low = mid;
+                } else {
+                    high = mid;
+                }
+            }
+
+            document.body.removeChild(testElement);
+            const adjustedFontSize = Math.max(minFontSize, bestFontSize * 0.7);
+            return adjustedFontSize;
+        }
+
         // Calculate and apply optimal card size based on number of matches
         function calculateCardSize(matchCount) {
             const matchesGrid = document.getElementById('matchesGrid');
@@ -341,51 +409,75 @@
 
             if (matchCards.length === 0) return;
 
-            // Base values
-            const baseCardHeight = 200; // Base height in pixels
-            const basePadding = 24; // Base padding in pixels
-            const baseFontSize = 36; // Base font size in pixels (player names)
-            const baseStationFontSize = 48; // Base station font size in pixels
-            const baseMarginBottom = 12; // Base margin bottom
             const gap = 20; // Grid gap in pixels
             const containerPadding = 20;
+            const panelPadding = 16; // Padding inside left/right panels
 
             // Calculate available height
             const viewportHeight = window.innerHeight;
             const availableHeight = viewportHeight - (containerPadding * 2);
+
+            // Calculate maximum height per card (approximately 1/4 of screen height)
+            const maxCardHeight = viewportHeight * 0.25;
 
             // Calculate how many rows we need (2 columns)
             const rows = Math.ceil(matchCount / 2);
 
             // Calculate total height needed for all cards
             const totalGapHeight = (rows - 1) * gap;
-            const heightPerCard = (availableHeight - totalGapHeight) / rows;
+            const heightPerCard = Math.min((availableHeight - totalGapHeight) / rows, maxCardHeight);
 
-            // Determine scale factor (never go above 1.0, always fit content)
-            const scaleFactor = Math.min(1.0, heightPerCard / baseCardHeight);
+            // Get grid container width
+            const gridElement = document.getElementById('matchesGrid');
+            const gridWidth = gridElement.offsetWidth;
+            const cardWidth = (gridWidth - gap) / 2; // Approximate card width
+            const panelWidth = (cardWidth / 2) - (panelPadding * 2); // Width of each half minus padding
 
-            // Apply scaling to all match cards
+            // Apply sizing to all match cards
             matchCards.forEach(card => {
-                const newPadding = basePadding * scaleFactor;
-                const newFontSize = baseFontSize * scaleFactor;
-                const newStationFontSize = baseStationFontSize * scaleFactor;
-                const newMarginBottom = baseMarginBottom * scaleFactor;
-                const newLineHeight = 1.4 * scaleFactor;
+                card.style.minHeight = `${heightPerCard}px`;
+                card.style.maxHeight = `${heightPerCard}px`;
 
-                card.style.padding = `${newPadding}px`;
-                card.style.minHeight = `${baseCardHeight * scaleFactor}px`;
+                // Get left and right panels
+                const leftPanel = card.querySelector('.match-card-left');
+                const rightPanel = card.querySelector('.match-card-right');
 
+                const availablePanelHeight = heightPerCard - (panelPadding * 2);
+
+                if (leftPanel) {
+                    leftPanel.style.padding = `${panelPadding}px`;
+                    leftPanel.style.minHeight = `${heightPerCard}px`;
+                }
+                if (rightPanel) {
+                    rightPanel.style.padding = `${panelPadding}px`;
+                    rightPanel.style.minHeight = `${heightPerCard}px`;
+                }
+
+                // Calculate optimal font sizes
                 const stationDiv = card.querySelector('.station-number');
                 if (stationDiv) {
-                    stationDiv.style.fontSize = `${newStationFontSize}px`;
-                    stationDiv.style.marginBottom = `${newMarginBottom}px`;
-                    stationDiv.style.lineHeight = `${newLineHeight}`;
+                    const optimalStationSize = calculateOptimalFontSize(
+                        stationDiv,
+                        panelWidth,
+                        availablePanelHeight,
+                        14,
+                        120
+                    );
+                    stationDiv.style.fontSize = `${optimalStationSize}px`;
+                    stationDiv.style.lineHeight = '1.2';
                 }
 
                 const playersDiv = card.querySelector('.players');
                 if (playersDiv) {
-                    playersDiv.style.fontSize = `${newFontSize}px`;
-                    playersDiv.style.lineHeight = `${newLineHeight}`;
+                    const optimalPlayersSize = calculateOptimalFontSize(
+                        playersDiv,
+                        panelWidth,
+                        availablePanelHeight,
+                        14,
+                        120
+                    );
+                    playersDiv.style.fontSize = `${optimalPlayersSize}px`;
+                    playersDiv.style.lineHeight = '1.2';
                 }
             });
         }
@@ -417,9 +509,13 @@
 
                 return `
                     <div class="match-card">
-                        <div class="station-number">Station ${station}</div>
-                        <div class="players">
-                            ${player1} <span class="vs">vs</span> ${player2}
+                        <div class="match-card-left">
+                            <div class="station-number">Station ${station}</div>
+                        </div>
+                        <div class="match-card-right">
+                            <div class="players">
+                                ${player1} <span class="vs">vs</span> ${player2}
+                            </div>
                         </div>
                     </div>
                 `;
