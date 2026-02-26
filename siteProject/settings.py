@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'siteApp',
-    'testEnvironment'
+    'testEnvironment',
+    'start_gg_matches',
 ]
 
 MIDDLEWARE = [

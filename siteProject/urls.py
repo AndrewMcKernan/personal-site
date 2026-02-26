@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('siteApp.urls')),
     path('testEnvironment/', include('testEnvironment.urls')),
+    path('stAlbertSmash/', include('start_gg_matches.urls')),
 ]
