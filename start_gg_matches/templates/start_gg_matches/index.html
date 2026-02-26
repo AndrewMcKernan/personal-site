@@ -2,9 +2,542 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AYO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start.gg Live Matches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #inputContainer {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        #inputContainer.hidden {
+            display: none;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            margin-top: 10px;
+        }
+
+        #matchesContainer {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        #matchesContainer.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-name {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .match-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .match-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .station-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .players {
+            font-size: 20px;
+            color: #333;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .vs {
+            color: #999;
+            margin: 0 8px;
+        }
+
+        .no-matches {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 40px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
+    <div id="inputContainer">
+        <h1>Start.gg Live Match Tracker</h1>
+        <div class="input-group">
+            <label for="apiToken">API Token:</label>
+            <input type="password" id="apiToken" placeholder="Enter your start.gg API token" required>
+        </div>
+        <div class="input-group">
+            <label for="eventUrl">Event URL:</label>
+            <input type="text" id="eventUrl" placeholder="https://www.start.gg/tournament/test/event/test" required>
+        </div>
+        <button id="submitBtn" onclick="handleSubmit()">Start Tracking</button>
+        <div id="error" class="error"></div>
+        <div id="loading" class="loading"></div>
+    </div>
 
+    <div id="matchesContainer">
+        <div class="header">
+            <div class="event-name" id="eventName"></div>
+            <div class="last-updated">Last updated: <span id="lastUpdated"></span></div>
+            <button class="back-button" onclick="goBack()">← Change Event</button>
+        </div>
+        <div class="matches-grid" id="matchesGrid"></div>
+        <div id="noMatches" class="no-matches" style="display: none;">
+            No active matches at this time.
+        </div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'https://api.start.gg/gql/alpha';
+        let apiToken = '';
+        let eventId = null;
+        let eventName = '';
+        let pollingInterval = null;
+
+        // GraphQL query to get event ID from slug
+        function getEventIdQuery(slug) {
+            return {
+                query: `
+                    query getEventId($slug: String) {
+                        event(slug: $slug) {
+                            id
+                            name
+                        }
+                    }
+                `,
+                variables: {
+                    slug: slug
+                }
+            };
+        }
+
+        // GraphQL query to get all sets for an event
+        function getEventSetsQuery(eventId, page, perPage) {
+            return {
+                query: `
+                    query EventSets($eventId: ID!, $page: Int!, $perPage: Int!) {
+                        event(id: $eventId) {
+                            id
+                            name
+                            sets(
+                                page: $page
+                                perPage: $perPage
+                                sortType: STANDARD
+                            ) {
+                                pageInfo {
+                                    total
+                                }
+                                nodes {
+                                    id
+                                    station {
+                                        number
+                                    }
+                                    startedAt
+                                    winnerId
+                                    slots {
+                                        id
+                                        entrant {
+                                            id
+                                            name
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    eventId: parseInt(eventId),
+                    page: page,
+                    perPage: perPage
+                }
+            };
+        }
+
+        // Make API request
+        async function makeRequest(queryData) {
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiToken}`
+                    },
+                    body: JSON.stringify(queryData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.errors) {
+                    throw new Error(data.errors[0].message);
+                }
+
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Extract slug from URL
+        function extractSlug(url) {
+            // URL format: https://www.start.gg/tournament/test-for-api/event/test
+            // Slug format: tournament/test-for-api/event/test
+            const match = url.match(/start\.gg\/(tournament\/[^\/]+\/event\/[^\/\?]+)/);
+            if (match) {
+                return match[1];
+            }
+            throw new Error('Invalid URL format. Expected: https://www.start.gg/tournament/[name]/event/[name]');
+        }
+
+        // Get all sets (handling pagination)
+        async function getAllSets(eventId) {
+            let allSets = [];
+            let page = 1;
+            const perPage = 50; // Fetch 50 sets per page
+            let hasMore = true;
+
+            while (hasMore) {
+                const data = await makeRequest(getEventSetsQuery(eventId, page, perPage));
+                const sets = data.data.event.sets.nodes;
+                const total = data.data.event.sets.pageInfo.total;
+
+                allSets = allSets.concat(sets);
+
+                if (allSets.length >= total) {
+                    hasMore = false;
+                } else {
+                    page++;
+                }
+            }
+
+            return allSets;
+        }
+
+        // Filter active sets (started but no winner)
+        function getActiveSets(sets) {
+            const now = Date.now() / 1000; // Current time in Unix timestamp
+            return sets.filter(set => {
+                const hasStarted = set.startedAt && set.startedAt < now;
+                const hasNoWinner = !set.winnerId;
+                return hasStarted && hasNoWinner;
+            });
+        }
+
+        // Display matches
+        function displayMatches(activeSets) {
+            const matchesGrid = document.getElementById('matchesGrid');
+            const noMatches = document.getElementById('noMatches');
+
+            if (activeSets.length === 0) {
+                matchesGrid.innerHTML = '';
+                noMatches.style.display = 'block';
+                return;
+            }
+
+            noMatches.style.display = 'none';
+
+            // Sort by station number
+            activeSets.sort((a, b) => {
+                const stationA = parseInt(a.station.number) || 999999;
+                const stationB = parseInt(b.station.number) || 999999;
+                return stationA - stationB;
+            });
+
+            const html = activeSets.map(set => {
+                const player1 = set.slots[0]?.entrant?.name || 'Unknown';
+                const player2 = set.slots[1]?.entrant?.name || 'Unknown';
+                const station = set.station.number || 'N/A';
+
+                return `
+                    <div class="match-card">
+                        <div class="station-number">Station ${station}</div>
+                        <div class="players">
+                            ${player1} <span class="vs">vs</span> ${player2}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            matchesGrid.innerHTML = html;
+        }
+
+        // Update last updated time
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = timeString;
+        }
+
+        // Fetch and display active matches
+        async function updateMatches() {
+            try {
+                const allSets = await getAllSets(eventId);
+                const activeSets = getActiveSets(allSets);
+                displayMatches(activeSets);
+                updateLastUpdatedTime();
+            } catch (error) {
+                console.error('Error updating matches:', error);
+                showError('Error fetching matches: ' + error.message);
+            }
+        }
+
+        // Start polling
+        function startPolling() {
+            updateMatches(); // Initial fetch
+            pollingInterval = setInterval(updateMatches, 5000); // Poll every 5 seconds
+        }
+
+        // Stop polling
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+        }
+
+        // Show loading message
+        function showLoading(message) {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.textContent = message;
+        }
+
+        // Handle form submission
+        async function handleSubmit() {
+            const tokenInput = document.getElementById('apiToken');
+            const urlInput = document.getElementById('eventUrl');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Clear previous errors
+            showError('');
+            showLoading('');
+
+            // Validate inputs
+            if (!tokenInput.value.trim()) {
+                showError('Please enter your API token');
+                return;
+            }
+
+            if (!urlInput.value.trim()) {
+                showError('Please enter an event URL');
+                return;
+            }
+
+            apiToken = tokenInput.value.trim();
+
+            try {
+                // Extract slug from URL
+                const slug = extractSlug(urlInput.value.trim());
+
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                showLoading('Fetching event information...');
+
+                // Get event ID
+                const eventData = await makeRequest(getEventIdQuery(slug));
+
+                if (!eventData.data.event) {
+                    throw new Error('Event not found. Please check the URL.');
+                }
+
+                eventId = eventData.data.event.id;
+                eventName = eventData.data.event.name;
+
+                // Update UI
+                document.getElementById('eventName').textContent = eventName;
+                document.getElementById('inputContainer').classList.add('hidden');
+                document.getElementById('matchesContainer').classList.add('active');
+
+                // Start polling for matches
+                startPolling();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message);
+                submitBtn.disabled = false;
+                showLoading('');
+            }
+        }
+
+        // Go back to input form
+        function goBack() {
+            stopPolling();
+            document.getElementById('inputContainer').classList.remove('hidden');
+            document.getElementById('matchesContainer').classList.remove('active');
+            document.getElementById('matchesGrid').innerHTML = '';
+            eventId = null;
+            eventName = '';
+        }
+
+        // Allow Enter key to submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('#apiToken, #eventUrl');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
+                });
+            });
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            stopPolling();
+        });
+    </script>
 </body>
 </html>
