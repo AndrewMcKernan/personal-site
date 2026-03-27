@@ -494,6 +494,8 @@
             }
 
             noMatches.style.display = 'none';
+            // remove any elements where .station is null from activeSets
+            activeSets = activeSets.filter(set => set.station && set.station.number);
 
             // Sort by station number
             activeSets.sort((a, b) => {
